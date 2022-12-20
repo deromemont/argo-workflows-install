@@ -1,0 +1,45 @@
+workflow1-activate: true
+
+argo-workflows:
+  persistence:
+    postgresql: # or mysql
+      host: pgsqldb.dundermifflin.com
+      port: 5432
+      database: argo-workflows
+      userNameSecret:
+        name: argo-postgres-config
+        key: username
+      passwordSecret:
+        name: argo-postgres-config
+        key: password
+  
+  # SSO Configuration
+  server:
+    extraArgs:
+      - --auth-mode=sso
+  sso: |
+    issuer: https://oauth2.dundermifflin.com/
+    clientId: argo-workflows
+    clientSecret:
+      name: argo-workflows-sso
+      key: clientSecret
+    redirectUrl: https://argo-workflows.dundermifflin.com/oauth2/callback
+    scopes:
+      - openid
+      - email
+      - profile
+      - groups
+  
+  # Artifact Repository Configuration
+  artifactRepository:
+    archiveLogs: true
+    s3:
+      bucket: argo-workflows-artifacts
+      endpoint: s3.dundermifflin.com
+      insecure: true
+      accessKeySecret:
+        name: argo-workflows-s3
+        key: accesskey
+      secretKeySecret:
+        name: argo-workflows-s3
+        key: secretkey

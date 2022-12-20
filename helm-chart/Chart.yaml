@@ -1,0 +1,9 @@
+apiVersion: v2
+name: shape-expert
+type: application
+version: "1"
+appVersion: 1.0.1
+dependencies:
+- name: argo-workflows
+  version: 0.22.3
+  repository: "https://argoproj.github.io/argo-helm"
